@@ -7,9 +7,9 @@ import { AiFillDelete, AiFillPlusCircle } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { withSwal } from "react-sweetalert2";
+// import { withSwal } from "react-sweetalert2";
 
-function Categories({ swal }) {
+export default function Categories() {
   const [editedCategory, setEditedCategory] = useState(null);
   const [name, setName] = useState("");
   const [parentCategory, setParentCategory] = useState("");
@@ -47,25 +47,25 @@ function Categories({ swal }) {
     setParentCategory(category?.parent?._id);
   }
 
-  function deleteCategory(category) {
-    swal
-      .fire({
-        title: `Bạn có chắc?`,
-        text: `Muốn xóa danh mục ${category.name} không !!`,
-        showCancelButton: true,
-        cancelButtontext: "Hủy",
-        confirmButtontext: "Đồng ý",
-        confirmButtonColor: "#d55",
-        reverseButtons: true,
-      })
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          const { _id } = category;
-          await axios.delete("/api/categories/?_id=" + _id);
-          fecthCategories();
-        }
-      });
-  }
+  // function deleteCategory(category) {
+  //   swal
+  //     .fire({
+  //       title: `Bạn có chắc?`,
+  //       text: `Muốn xóa danh mục ${category.name} không !!`,
+  //       showCancelButton: true,
+  //       cancelButtontext: "Hủy",
+  //       confirmButtontext: "Đồng ý",
+  //       confirmButtonColor: "#d55",
+  //       reverseButtons: true,
+  //     })
+  //     .then(async (result) => {
+  //       if (result.isConfirmed) {
+  //         const { _id } = category;
+  //         await axios.delete("/api/categories/?_id=" + _id);
+  //         fecthCategories();
+  //       }
+  //     });
+  // }
 
   return (
     <>
@@ -152,12 +152,12 @@ function Categories({ swal }) {
                   >
                     <FiEdit size={20} /> Edit
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => deleteCategory(category)}
                     className="items-center flex gap-2 px-3 py-2 font-bold rounded-lg bg-yellow-300 text-red-600"
                   >
                     <AiFillDelete size={20} /> Xóa
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}
@@ -168,4 +168,4 @@ function Categories({ swal }) {
   );
 }
 
-export default withSwal(({ swal }, ref) => <Categories swal={swal} />);
+// export default withSwal(({ swal }, ref) => <Categories swal={swal} />);
