@@ -22,8 +22,8 @@ export default function Games() {
       >
         <AiOutlinePlus /> Add new
       </Link>
-      <table className="mt-2">
-        <thead className="text-center">
+      <table className="basic mt-2">
+        <thead className="basic text-center">
           <tr>
             <td>Mã sản phẩm</td>
             <td>Tên sản phẩm</td>

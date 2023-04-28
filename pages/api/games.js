@@ -14,28 +14,54 @@ export default async function handle(req, res) {
   }
 
   if (method === "POST") {
-    const { title, desciption, price, requirement, contruction, images } =
-      req.body;
-
+    const {
+      title,
+      desciption,
+      price,
+      discount,
+      requirement,
+      contruction,
+      images,
+      category,
+    } = req.body;
     const GameDoc = await Game.create({
       title,
       desciption,
       price,
+      discount,
       requirement,
       contruction,
       images,
+      category,
     });
     res.json(GameDoc);
   }
 
   if (method === "PUT") {
-    const { title, desciption, price, requirement, contruction, images, _id } =
-      req.body;
+    const {
+      title,
+      desciption,
+      price,
+      discount,
+      requirement,
+      contruction,
+      images,
+      category,
+      _id,
+    } = req.body;
     await Game.updateOne(
       { _id },
-      { title, desciption, price, requirement, contruction, images },
+      {
+        title,
+        desciption,
+        price,
+        discount,
+        requirement,
+        contruction,
+        images,
+        category,
+      },
     );
-
     res.json(true);
   }
 

@@ -36,6 +36,13 @@ export default function Nav() {
           Sản phẩm
         </Link>
         <Link
+          href={"/categories"}
+          className={pathname === "categories" ? activeLink : inactiveLink}
+        >
+          <AiOutlineShop size={20} />
+          Danh mục
+        </Link>
+        <Link
           href={"/orders"}
           className={pathname === "orders" ? activeLink : inactiveLink}
         >

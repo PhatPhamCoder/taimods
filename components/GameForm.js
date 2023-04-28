@@ -1,32 +1,48 @@
 /* eslint-disable @next/next/no-img-element */
 import { ToastContainer, toast } from "react-toastify";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { trusted } from "mongoose";
 import Spinner from "./Spinner";
+import { ReactSortable } from "react-sortablejs";
+
 export default function GameForm({
   _id,
   title: existingTitle,
   desciption: existingDesciption,
   price: existingPrice,
+  discount: existingDiscount,
   requirement: existingRequirement,
   contruction: existingContruction,
   images: existingImages,
+  category: existingCategory,
 }) {
   const router = useRouter();
   const [title, setTitle] = useState(existingTitle || "");
   const [desciption, setDescription] = useState(existingDesciption || "");
   const [price, setPrice] = useState(existingPrice || "");
+  const [discount, setDiscount] = useState(existingDiscount || "");
   const [requirement, setRequirment] = useState(existingRequirement || "");
   const [contruction, setContruction] = useState(existingContruction || "");
   const [images, setImages] = useState(existingImages || []);
   const [isUpLoading, setIsUpLoading] = useState(false);
-  async function saveProduct(ev) {
-    ev.preventDefault();
-    const data = { title, desciption, price, requirement, contruction, images };
+  const [category, setCategory] = useState(existingCategory || "");
+  const [categories, setCategories] = useState([]);
+
+  async function saveProduct(e) {
+    e.preventDefault();
+    const data = {
+      title,
+      desciption,
+      price,
+      discount,
+      requirement,
+      contruction,
+      images,
+      category,
+    };
     if (_id) {
       // Update
       await axios.put("/api/games", { ...data, _id });
@@ -36,7 +52,7 @@ export default function GameForm({
       await axios.post("/api/games", data);
       toast.success("Thêm sản phẩm thành công");
     }
-    router.push("/games");
+    goBack();
   }
 
   function goBack() {
@@ -59,6 +75,16 @@ export default function GameForm({
     }
   }
 
+  function updateImagesOrder(images) {
+    setImages(images);
+  }
+
+  useEffect(() => {
+    axios.get("/api/categories").then((res) => {
+      setCategories(res.data);
+    });
+  }, []);
+
   return (
     <>
       <ToastContainer
@@ -74,13 +100,33 @@ export default function GameForm({
         theme="light"
       />
       <form onSubmit={saveProduct}>
-        <label>Tên game</label>
-        <input
-          type="text"
-          placeholder="Tên game"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label>Tên game</label>
+            <input
+              type="text"
+              placeholder="Tên game"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>Chọn danh mục sản phẩm</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="py-1.5 mb-0"
+            >
+              <option value="">Không có danh mục</option>
+              {categories?.length > 0 &&
+                categories?.map((category) => (
+                  <option key={category} value={category?._id}>
+                    {category.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </div>
         <label>Hình ảnh</label>
         <div className="flex gap-3">
           <label
@@ -90,17 +136,23 @@ export default function GameForm({
             <AiOutlineCloudUpload size={30} /> Upload
           </label>
           <div className="flex gap-3 items-center">
-            {images &&
-              images.map((link) => (
-                <div key={link}>
-                  <img
-                    src={link}
-                    alt="img review"
-                    width="300px"
-                    className="rounded-md"
-                  />
-                </div>
-              ))}
+            <ReactSortable
+              list={images}
+              className="flex gap-2 flex-wrap"
+              setList={updateImagesOrder}
+            >
+              {!!images?.length &&
+                images.map((image) => (
+                  <div key={image}>
+                    <img
+                      src={image}
+                      alt="img review"
+                      width="300px"
+                      className="rounded-lg"
+                    />
+                  </div>
+                ))}
+            </ReactSortable>
             {isUpLoading && (
               <div className="h-24">
                 <Spinner />
@@ -117,13 +169,26 @@ export default function GameForm({
             className="hidden"
           />
         </div>
-        <label>Giá bán (VND)</label>
-        <input
-          type="number"
-          placeholder="Giá bán"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label>Giá bán (VND)</label>
+            <input
+              type="number"
+              placeholder="Nhập giá bán"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>Giá giảm (VND)</label>
+            <input
+              type="number"
+              placeholder="Nhập giá khuyến mãi"
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+            />
+          </div>
+        </div>
         <label>Mô tả game</label>
         <textarea
           type="text"
