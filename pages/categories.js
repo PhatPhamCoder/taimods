@@ -7,7 +7,6 @@ import { AiFillDelete, AiFillPlusCircle } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { withSwal } from "react-sweetalert2";
 
 export default function Categories() {
   const [editedCategory, setEditedCategory] = useState(null);
