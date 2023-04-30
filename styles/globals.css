@@ -8,6 +8,18 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+body::-webkit-scrollbar {
+    width: 6px;
+}
+
+body::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: gray;
+}
+
 label {
     @apply text-blue-900 font-bold text-base;
 }
@@ -27,8 +39,12 @@ input:focus {
     @apply bg-red-600 text-white px-6 py-2 rounded-md font-bold;
 }
 
+table {
+    @apply border-2;
+}
+
 table.basic {
-    @apply w-full;
+    @apply w-full bg-white rounded-sm shadow-md;
 }
 
 table.basic thead tr td {
@@ -37,6 +53,7 @@ table.basic thead tr td {
 
 table.basic tr td {
     @apply border border-gray-300 p-1;
+    border: none;
 }
 
 table a {
@@ -49,4 +66,8 @@ table a {
 
 .btn-cancel {
     @apply bg-blue-500 rounded-md px-6 py-2 text-white font-bold;
+}
+
+.btn-default {
+    @apply px-4 py-1 rounded-md bg-gray-500 text-white;
 }

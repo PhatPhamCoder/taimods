@@ -12,6 +12,7 @@ const GameShema = new Schema(
       type: [String],
     },
     category: { type: mongoose.Types.ObjectId, ref: "Category" },
+    properties: { type: Object },
   },
   { timestamps: true },
 );

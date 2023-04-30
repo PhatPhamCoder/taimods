@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable @next/next/no-img-element */
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,6 +31,7 @@ export default function GameForm({
   const [isUpLoading, setIsUpLoading] = useState(false);
   const [category, setCategory] = useState(existingCategory || "");
   const [categories, setCategories] = useState([]);
+  // const [productProperties, setProductProperties] = useState({});
 
   async function saveProduct(e) {
     e.preventDefault();
@@ -85,6 +87,27 @@ export default function GameForm({
     });
   }, []);
 
+  const propertiesToFill = [];
+  if (categories.length > 0 && category) {
+    let catInfo = categories.find(({ _id }) => _id === category);
+    propertiesToFill.push(...catInfo.properties);
+    while (catInfo?.parent?._id) {
+      const parentCat = categories.find(
+        ({ _id }) => _id === catInfo?.parent?._id,
+      );
+      propertiesToFill.push(parentCat.properties);
+      catInfo = parentCat;
+    }
+  }
+
+  // function setProductProp(porpName, value) {
+  //   setProductProperties((prev) => {
+  //     const newProductProps = { ...prev };
+  //     newProductProps[porpName] = value;
+  //     return newProductProps;
+  //   });
+  // }
+
   return (
     <>
       <ToastContainer
@@ -100,32 +123,47 @@ export default function GameForm({
         theme="light"
       />
       <form onSubmit={saveProduct}>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label>Tên game</label>
-            <input
-              type="text"
-              placeholder="Tên game"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <div>
-            <label>Chọn danh mục sản phẩm</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="py-1.5 mb-0"
-            >
-              <option value="">Không có danh mục</option>
-              {categories?.length > 0 &&
-                categories?.map((category) => (
-                  <option key={category} value={category?._id}>
-                    {category.name}
-                  </option>
-                ))}
-            </select>
-          </div>
+        <div>
+          <label>Tên game</label>
+          <input
+            type="text"
+            placeholder="Tên game"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Chọn danh mục sản phẩm</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="py-1.5 mb-0"
+          >
+            <option value="">Không có danh mục</option>
+            {categories?.length > 0 &&
+              categories?.map((category) => (
+                <option key={category} value={category?._id}>
+                  {category.name}
+                </option>
+              ))}
+          </select>
+          <h4 className="bg-blue-500 rounded-md text-white px-3 w-[fit-content] mt-2">
+            Bao gồm các mod sau
+          </h4>
+          {propertiesToFill.length > 0 &&
+            propertiesToFill.map((p) => (
+              <div className="flex gap-2 mt-2">
+                <div>{p.name}</div>
+                {/* <select
+                  onChange={(ev) => setProductProp(ev.target.value, p.name)}
+                >
+                  {p.values?.map((v) => (
+                    <option value={v}>{v}</option>
+                  ))}
+                </select> */}
+                <div>{p.values}</div>
+              </div>
+            ))}
         </div>
         <label>Hình ảnh</label>
         <div className="flex gap-3">

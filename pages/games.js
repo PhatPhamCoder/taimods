@@ -23,32 +23,32 @@ export default function Games() {
         <AiOutlinePlus /> Add new
       </Link>
       <table className="basic mt-2">
-        <thead className="basic text-center">
+        <thead className="basic text-center rounded-lg">
           <tr>
-            <td>Mã sản phẩm</td>
+            <td className="hidden md:block">Mã sản phẩm</td>
             <td>Tên sản phẩm</td>
-            <td>Chức năng</td>
+            <td className="w-[200px] h-full">Chức năng</td>
           </tr>
         </thead>
         <tbody>
           {games?.map((item) => (
             <tr>
-              <td className="text-center">
+              <td className="hidden md:block text-center">
                 {item?._id.slice(-8).toUpperCase()}
               </td>
               <td>{item.title}</td>
-              <td className="flex gap-2 items-center justify-center">
+              <td className="flex gap-2 mt-4 md:mt-1 items-center w-[200px] justify-center">
                 <Link
                   href={"/games/edit/" + item?._id}
-                  className="items-center bg-blue-600 text-white"
+                  className="bg-blue-600 text-white"
                 >
-                  <FiEdit size={20} /> Edit
+                  <FiEdit size={20} />
                 </Link>
                 <Link
                   href={"/games/delete/" + item?._id}
-                  className="items-center bg-yellow-300 text-red-600"
+                  className="bg-red-200 text-red-600"
                 >
-                  <AiFillDelete size={20} /> Xóa
+                  <AiFillDelete size={20} />
                 </Link>
               </td>
             </tr>
